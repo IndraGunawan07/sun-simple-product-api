@@ -57,4 +57,17 @@ class Auth extends Controller
     $token = $this->userTokenModel->insertData('insertData', ['userId' => $user->users_id]);
     return response()->json(['messages' => 'Login success', 'token' => $token->users_token], 200);
   }
+
+  function logout(Request $request){
+    $post = $request->all();
+    $post['token'] = $request->bearerToken();
+    $validator = Validator::make($post, [
+      'token' => 'required|exists:users_token_tr,users_token'
+    ]);
+    if($validator->fails()){
+      return response()->json($validator->errors(), 400);
+    }
+    $this->userTokenModel->deleteData('deleteData', $post);
+    return response()->json(['messages' => 'Logout success'], 200);
+  }
 }

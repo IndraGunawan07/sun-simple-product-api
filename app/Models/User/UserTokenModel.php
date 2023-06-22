@@ -34,8 +34,8 @@ class UserTokenModel extends Model
   function getData($flag = '', $data = [], $convertLabel = ''){
     $result = [];
     switch($flag){
-      case 'getByEmail':
-        $result = UserModel::where('users_email', $data['email'])->first();
+      case 'checkToken':
+        $result = $this->where('users_token', $data['token'])->first();
         break;
     }
     return $this->convertData($convertLabel, $result);
@@ -54,7 +54,8 @@ class UserTokenModel extends Model
   function deleteData($flag = '', $data){
     switch($flag){
       case 'deleteData':
-
+        return $this->where('users_token', $data['token'])->delete();
+        break;
     }
   }
 

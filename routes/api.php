@@ -25,10 +25,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'user'], function(){
   Route::post('register', [Auth::class, 'register']);
   Route::post('login', [Auth::class, 'login']);
+  Route::get('logout', [Auth::class, 'logout'])->middleware('checkUser');
 });
 
 // Product Category
-Route::group(['prefix' => 'product-category'], function(){
+Route::group(['prefix' => 'product-category', 'middleware' => ['checkUser']], function(){
   Route::get('', [ProductCategory::class, 'index']);
   Route::get('{id}', [ProductCategory::class, 'detail']);
   Route::post('', [ProductCategory::class, 'insert']);
@@ -37,7 +38,7 @@ Route::group(['prefix' => 'product-category'], function(){
 });
 
 // Product
-Route::group(['prefix' => 'product'], function(){
+Route::group(['prefix' => 'product', 'middleware' => ['checkUser']], function(){
   Route::get('', [Product::class, 'index']);
   Route::get('{id}', [Product::class, 'detail']);
   Route::get('{id}/pay', [Product::class, 'paymentGateway']);
